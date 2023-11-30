@@ -5,6 +5,11 @@ const getTimer = document.querySelector('.timer');
 const getInput = document.querySelector('#datetime-picker');
 const getButton = document.querySelector('button[data-start]');
 
+const getDays = document.querySelector('span[data-days]');
+const getHours = document.querySelector('span[data-hours]');
+const getMinutes = document.querySelector('span[data-minutes]');
+const getSeconds = document.querySelector('span[data-seconds]');
+
 getTimer.style.fontSize = '20px';
 getTimer.style.display = 'flex';
 getTimer.style.gap = '10px';
@@ -29,7 +34,7 @@ const options = {
 
 flatpickr(getInput, options);
 
-function convertMs(ms) {
+function convertMs(selectedDates) {
   // Number of milliseconds per unit of time
   const second = 1000;
   const minute = second * 60;
@@ -37,29 +42,40 @@ function convertMs(ms) {
   const day = hour * 24;
 
   // Remaining days
-  const days = Math.floor(ms / day);
+  const days = Math.floor(selectedDates / day);
   // Remaining hours
-  const hours = Math.floor((ms % day) / hour);
+  const hours = Math.floor((selectedDates % day) / hour);
   // Remaining minutes
-  const minutes = Math.floor(((ms % day) % hour) / minute);
+  const minutes = Math.floor(((selectedDates % day) % hour) / minute);
   // Remaining seconds
-  const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
+  const seconds = Math.floor(
+    (((selectedDates % day) % hour) % minute) / second
+  );
   return { days, hours, minutes, seconds };
 }
+
 console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
 console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
 console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
 
+const addItem = convertMs(options.defaultDate);
+
 getButton.addEventListener('click', getClickButton);
 
 function getClickButton(event) {
-  const getTime = setInterval(() => {
-    toString(convertMs());
+  const abc = setInterval(() => {
+    let a = console.log('hello');
+    getDays.textContent = addItem.days -= 1;
+    getHours.textContent = addItem.hours -= 1;
+    getMinutes.textContent = addItem.minutes -= 1;
+    getSeconds.textContent = addItem.seconds -= 1;
   }, 1000);
-  clearInterval(getTime);
+
+  //   const formatTime = abc.toLocaleTimeString();
+
+  //   clearInterval(getTime);
 }
 
-function addLeadingZero(value) {
-  console.log(padStart(convertMs()));
+function addLeadingZero(addItem) {
+  addItem.padStart('0');
 }

@@ -57,22 +57,20 @@ const getSeconds = document.querySelector('span[data-seconds]');
 
 getButton.addEventListener('click', getClickButton);
 
+function addLeadingZero(value) {
+  return String(value).padStart(2, '0');
+}
 function getClickButton(event) {
   let textTime = setInterval(() => {
-    let { days, hours, minutes, seconds } = convertMs(
+    const { days, hours, minutes, seconds } = convertMs(
       calendar.selectedDates[0] - new Date()
     );
-    function addLeadingZero(value) {
-      console.log(String.value.padStart(2, '0'));
-    }
+
+    // addLeadingZero((getDays.textContent = days));
     getDays.textContent = addLeadingZero(days);
-    console.log(days);
     getHours.textContent = addLeadingZero(hours);
-    console.log(hours);
     getMinutes.textContent = addLeadingZero(minutes);
-    console.log(minutes);
     getSeconds.textContent = addLeadingZero(seconds);
-    console.log(seconds);
 
     if (
       getDays.textContent === '00' &&

@@ -1,14 +1,10 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import Notiflix from 'notiflix';
 
 const getTimer = document.querySelector('.timer');
 const getInput = document.querySelector('#datetime-picker');
 const getButton = document.querySelector('button[data-start]');
-
-const getDays = document.querySelector('span[data-days]');
-const getHours = document.querySelector('span[data-hours]');
-const getMinutes = document.querySelector('span[data-minutes]');
-const getSeconds = document.querySelector('span[data-seconds]');
 
 getTimer.style.fontSize = '20px';
 getTimer.style.display = 'flex';
@@ -24,15 +20,15 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    if (selectedDates[0] < options.defaultDate) {
-      window.alert('Please choose a date in the future');
+    if (selectedDates[0] < new Date()) {
+      Notiflix.Notify.failure('Please choose a date in the future');
     } else {
       getButton.disabled = false;
     }
   },
 };
 
-flatpickr(getInput, options);
+const calendar = flatpickr(getInput, options);
 
 function convertMs(selectedDates) {
   // Number of milliseconds per unit of time
@@ -54,28 +50,37 @@ function convertMs(selectedDates) {
   return { days, hours, minutes, seconds };
 }
 
-console.log(convertMs(2000)); // {days: 0, hours: 0, minutes: 0, seconds: 2}
-console.log(convertMs(140000)); // {days: 0, hours: 0, minutes: 2, seconds: 20}
-console.log(convertMs(24140000)); // {days: 0, hours: 6 minutes: 42, seconds: 20}
-
-const addItem = convertMs(options.defaultDate);
+const getDays = document.querySelector('span[data-days]');
+const getHours = document.querySelector('span[data-hours]');
+const getMinutes = document.querySelector('span[data-minutes]');
+const getSeconds = document.querySelector('span[data-seconds]');
 
 getButton.addEventListener('click', getClickButton);
 
 function getClickButton(event) {
-  const abc = setInterval(() => {
-    let a = console.log('hello');
-    getDays.textContent = addItem.days -= 1;
-    getHours.textContent = addItem.hours -= 1;
-    getMinutes.textContent = addItem.minutes -= 1;
-    getSeconds.textContent = addItem.seconds -= 1;
+  let textTime = setInterval(() => {
+    let { days, hours, minutes, seconds } = convertMs(
+      calendar.selectedDates[0] - new Date()
+    );
+    function addLeadingZero(value) {
+      console.log(String.value.padStart(2, '0'));
+    }
+    getDays.textContent = addLeadingZero(days);
+    console.log(days);
+    getHours.textContent = addLeadingZero(hours);
+    console.log(hours);
+    getMinutes.textContent = addLeadingZero(minutes);
+    console.log(minutes);
+    getSeconds.textContent = addLeadingZero(seconds);
+    console.log(seconds);
+
+    if (
+      getDays.textContent === '00' &&
+      getHours.textContent === '00' &&
+      getMinutes.textContent === '00' &&
+      getSeconds.textContent === '00'
+    ) {
+      clearInterval(textTime);
+    }
   }, 1000);
-
-  //   const formatTime = abc.toLocaleTimeString();
-
-  //   clearInterval(getTime);
-}
-
-function addLeadingZero(addItem) {
-  addItem.padStart('0');
 }

@@ -21,7 +21,7 @@ function getPromiseList(event) {
 
   const { delay, amount, step } = event.currentTarget.elements;
 
-  for (let i = 0; i <= +amount.value; i++) {
+  for (let i = 1; i <= +amount.value; i++) {
     let promiseDelay = +delay.value + +step.value * i;
     createPromise(i, promiseDelay)
       .then(({ position, delay }) =>

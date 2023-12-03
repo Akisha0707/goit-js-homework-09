@@ -14,7 +14,7 @@ function createPromise(position, delay) {
   });
 }
 
-getForm.addEventListener('click', getPromiseList);
+getForm.addEventListener('submit', getPromiseList);
 
 function getPromiseList(event) {
   event.preventDefault();

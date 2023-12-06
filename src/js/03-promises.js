@@ -2,16 +2,16 @@ import Notiflix from 'notiflix';
 
 const getForm = document.querySelector('.form');
 
-function createPromise(position, delay) {
+function createPromise(position, getTimePromise) {
   return new Promise((resolve, reject) => {
     const shouldResolve = Math.random() > 0.3;
     setTimeout(() => {
       if (shouldResolve) {
-        resolve({ position, delay });
+        resolve({ position, getTimePromise });
       } else {
-        reject({ position, delay });
+        reject({ position, getTimePromise });
       }
-    }, delay);
+    }, getTimePromise);
   });
 }
 
@@ -21,16 +21,16 @@ function getPromiseList(event) {
   event.preventDefault();
 
   const { delay, amount, step } = event.currentTarget.elements;
-
+  let getTimePromise = delay.value;
   for (let i = 1; i <= Number(amount.value); i++) {
-    let getTimePromise = delay.value;
-    createPromise(i, delay)
-      .then(({ position, delay }) =>
+    console.log(getTimePromise);
+    createPromise(i, getTimePromise)
+      .then(({ position, getTimePromise }) =>
         Notiflix.Notify.success(
           `✅ Fulfilled promise ${position} in ${getTimePromise}ms`
         )
       )
-      .catch(({ position, delay }) =>
+      .catch(({ position, getTimePromise }) =>
         Notiflix.Notify.failure(
           `❌ Rejected promise ${position} in ${getTimePromise}ms`
         )

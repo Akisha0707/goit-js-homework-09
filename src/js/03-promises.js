@@ -1,4 +1,5 @@
 import Notiflix from 'notiflix';
+
 const getForm = document.querySelector('.form');
 
 function createPromise(position, delay) {
@@ -21,16 +22,19 @@ function getPromiseList(event) {
 
   const { delay, amount, step } = event.currentTarget.elements;
 
-  for (let i = 1; i <= +amount.value; i++) {
-    let promiseDelay = +delay.value + +step.value * i;
-    createPromise(i, promiseDelay)
+  for (let i = 1; i <= Number(amount.value); i++) {
+    let getTimePromise = delay.value;
+    createPromise(i, delay)
       .then(({ position, delay }) =>
         Notiflix.Notify.success(
-          `✅ Fulfilled promise ${position} in ${delay}ms`
+          `✅ Fulfilled promise ${position} in ${getTimePromise}ms`
         )
       )
       .catch(({ position, delay }) =>
-        Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`)
+        Notiflix.Notify.failure(
+          `❌ Rejected promise ${position} in ${getTimePromise}ms`
+        )
       );
+    getTimePromise = Number(delay.value) + Number(step.value) * i;
   }
 }
